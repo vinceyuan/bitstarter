@@ -2,11 +2,17 @@ var express = require('express');
 
 var app = express.createServer(express.logger());
 
-var fs = require('fs');
+var fs = require('fs')
+  , path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(request, response) {
-  var content = fs.readFileSync(__dirname + '/index.html', 'utf8');
-  response.send(content);
+  fs.readFile(__dirname + '/index.html', 'utf8', function (err, data) {
+    if (err) throw err;
+    //console.log(data);
+    response.send(data);
+  });
 });
 
 var port = process.env.PORT || 5000;
